@@ -1,3 +1,4 @@
 {
-  "git.ignoreLimitWarning": true
+    "editor.tabSize": 4,
+    "cSpell.words": ["deepseek", "langchain", "langgraph"]
 }

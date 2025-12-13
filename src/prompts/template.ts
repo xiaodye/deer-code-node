@@ -1,31 +1,34 @@
-import fs from "fs-extra";
-import path from "path";
-import handlebars from "handlebars";
-import { fileURLToPath } from "url";
+import fs from 'fs-extra';
+import path from 'node:path';
+import handlebars from 'handlebars';
+import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export function applyPromptTemplate(templateName: string, kwargs: Record<string, any>): string {
-  // Assuming src/prompts/templates is the location relative to this file in dist
-  // Since we are using NodeNext, we can use import.meta.dirname if target is new enough,
-  // or simple __dirname if compiled to CJS (which is implied by the error).
-  // But tsconfig says NodeNext.
-  // The error says "import.meta" not allowed in CommonJS output.
-  // So tsconfig is transpiling to CJS.
+export function applyPromptTemplate(
+    templateName: string,
+    kwargs: Record<string, any>,
+): string {
+    // Assuming src/prompts/templates is the location relative to this file in dist
+    // Since we are using NodeNext, we can use import.meta.dirname if target is new enough,
+    // or simple __dirname if compiled to CJS (which is implied by the error).
+    // But tsconfig says NodeNext.
+    // The error says "import.meta" not allowed in CommonJS output.
+    // So tsconfig is transpiling to CJS.
 
-  // We'll use a safer way to locate templates.
-  // We assume the structure is preserved in dist or we are running with tsx.
+    // We'll use a safer way to locate templates.
+    // We assume the structure is preserved in dist or we are running with tsx.
 
-  // In CJS, __dirname is available.
-  const templateDir = path.join(__dirname, "templates");
-  const templatePath = path.join(templateDir, `${templateName}.md`);
+    // In CJS, __dirname is available.
+    const templateDir = path.join(__dirname, 'templates');
+    const templatePath = path.join(templateDir, `${templateName}.md`);
 
-  if (!fs.existsSync(templatePath)) {
-    throw new Error(`Template not found: ${templatePath}`);
-  }
+    if (!fs.existsSync(templatePath)) {
+        throw new Error(`Template not found: ${templatePath}`);
+    }
 
-  const templateContent = fs.readFileSync(templatePath, "utf-8");
-  const template = handlebars.compile(templateContent);
-  return template(kwargs);
+    const templateContent = fs.readFileSync(templatePath, 'utf-8');
+    const template = handlebars.compile(templateContent);
+    return template(kwargs);
 }
