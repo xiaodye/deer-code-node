@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import path from 'node:path';
 import { execa } from 'execa';
-import { project } from '../../project';
+import { project } from '@/project';
 
 export class BashTerminal {
     private _cwd: string;

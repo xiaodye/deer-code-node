@@ -1,6 +1,6 @@
 import { BaseMessage } from '@langchain/core/messages';
 import { Annotation } from '@langchain/langgraph';
-import { TodoItem } from '../tools/todo/types';
+import { TodoItem } from '@/tools/todo/types';
 
 export const CodingAgentState = Annotation.Root({
     messages: Annotation<BaseMessage[]>({

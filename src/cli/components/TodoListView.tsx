@@ -1,6 +1,5 @@
-import React from 'react';
 import { Box, Text } from 'ink';
-import { TodoItem, TodoStatus } from '../../tools/todo/types';
+import { TodoItem, TodoStatus } from '@/tools/todo/types';
 
 interface TodoListViewProps {
     todos: TodoItem[];

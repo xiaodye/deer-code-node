@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import process from 'process';
+import process from 'node:process';
 
 export class Project {
     private _rootDir: string;

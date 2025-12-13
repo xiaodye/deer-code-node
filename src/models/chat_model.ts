@@ -1,7 +1,7 @@
 import process from 'process';
 import { ChatDeepSeek } from '@langchain/deepseek';
 import { ChatOpenAI } from '@langchain/openai';
-import { getConfigSection } from '../config/config';
+import { getConfigSection } from '@/config/config';
 import { BaseChatModel } from '@langchain/core/language_models/chat_models';
 
 export function initChatModel(): BaseChatModel {

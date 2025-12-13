@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
 import path from 'node:path';
-import { project } from '../project';
+import { project } from '@/project';
 
 export interface ChatModelConfig {
     model: string;

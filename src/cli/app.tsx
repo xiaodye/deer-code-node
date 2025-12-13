@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Text, useInput } from 'ink';
 import TextInput from 'ink-text-input';
 import { AIMessage, BaseMessage, HumanMessage, ToolMessage } from '@langchain/core/messages';
-import { createCodingAgent } from '../agents/coding_agent';
+import { createCodingAgent } from '@/agents/coding_agent';
 import { ChatView } from './components/ChatView';
 import { TodoListView } from './components/TodoListView';
 import { TerminalView } from './components/TerminalView';
-import { TodoItem } from '../tools/todo/types';
+import { TodoItem } from '@/tools/todo/types';
 
 export const App = () => {
     const [messages, setMessages] = useState<BaseMessage[]>([]);
