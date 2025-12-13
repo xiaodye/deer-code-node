@@ -3,14 +3,7 @@ import { StructuredTool } from '@langchain/core/tools';
 import { initChatModel } from '../models/chat_model';
 import { project } from '../project';
 import { applyPromptTemplate } from '../prompts/template';
-import {
-    bashTool,
-    grepTool,
-    lsTool,
-    textEditorTool,
-    todoWriteTool,
-    treeTool,
-} from '../tools/index';
+import { bashTool, grepTool, lsTool, textEditorTool, todoWriteTool, treeTool } from '../tools';
 import { CodingAgentState } from './state';
 
 export function createCodingAgent(pluginTools: StructuredTool[] = []) {

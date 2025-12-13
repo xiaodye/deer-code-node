@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Text, useInput } from 'ink';
 import TextInput from 'ink-text-input';
-import {
-    AIMessage,
-    BaseMessage,
-    HumanMessage,
-    ToolMessage,
-} from '@langchain/core/messages';
+import { AIMessage, BaseMessage, HumanMessage, ToolMessage } from '@langchain/core/messages';
 import { createCodingAgent } from '../agents/coding_agent';
 import { ChatView } from './components/ChatView';
 import { TodoListView } from './components/TodoListView';
@@ -91,10 +86,7 @@ export const App = () => {
                 }
             }
         } catch (error) {
-            setMessages((prev) => [
-                ...prev,
-                new HumanMessage(`Error: ${error}`),
-            ]);
+            setMessages((prev) => [...prev, new HumanMessage(`Error: ${error}`)]);
         } finally {
             setIsGenerating(false);
         }
@@ -122,9 +114,7 @@ export const App = () => {
                     <TodoListView todos={todos} />
                 )}
                 <Box marginTop={1}>
-                    <Text dimColor>
-                        Press Tab to switch views (Terminal / Todo)
-                    </Text>
+                    <Text dimColor>Press Tab to switch views (Terminal / Todo)</Text>
                 </Box>
             </Box>
         </Box>

@@ -7,9 +7,7 @@ import { BaseChatModel } from '@langchain/core/language_models/chat_models';
 export function initChatModel(): BaseChatModel {
     const settings = getConfigSection(['models', 'chat_model']);
     if (!settings) {
-        throw new Error(
-            'The `models/chat_model` section in `config.yaml` is not found',
-        );
+        throw new Error('The `models/chat_model` section in `config.yaml` is not found');
     }
 
     let modelName = settings.model;

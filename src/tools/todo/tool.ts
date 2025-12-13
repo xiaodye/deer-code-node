@@ -43,9 +43,7 @@ export const todoWriteTool = tool(
         // Let's implement the logic to formatting the message first.
 
         const unfinishedTodos = todos.filter(
-            (todo) =>
-                todo.status !== TodoStatus.completed &&
-                todo.status !== TodoStatus.cancelled,
+            (todo) => todo.status !== TodoStatus.completed && todo.status !== TodoStatus.cancelled,
         );
 
         let message = `Successfully updated the TODO list with ${todos.length} items.`;
@@ -84,12 +82,8 @@ export const todoWriteTool = tool(
                     z.object({
                         id: z.number().min(0),
                         title: z.string().min(1),
-                        priority: z
-                            .nativeEnum(TodoPriority)
-                            .default(TodoPriority.medium),
-                        status: z
-                            .nativeEnum(TodoStatus)
-                            .default(TodoStatus.pending),
+                        priority: z.nativeEnum(TodoPriority).default(TodoPriority.medium),
+                        status: z.nativeEnum(TodoStatus).default(TodoStatus.pending),
                     }),
                 )
                 .describe('A list of TodoItem objects.'),

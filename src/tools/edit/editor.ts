@@ -13,10 +13,7 @@ class TextEditor {
         }
     }
 
-    async view(
-        filePath: string,
-        viewRange?: [number, number],
-    ): Promise<string> {
+    async view(filePath: string, viewRange?: [number, number]): Promise<string> {
         if (!(await fs.pathExists(filePath))) {
             throw new Error(`File does not exist: ${filePath}`);
         }
@@ -32,9 +29,7 @@ class TextEditor {
 
         if (viewRange) {
             if (viewRange.length !== 2 || !viewRange.every(Number.isInteger)) {
-                throw new Error(
-                    'Invalid `view_range`. It should be a list of two integers.',
-                );
+                throw new Error('Invalid `view_range`. It should be a list of two integers.');
             }
             [startLine, endLine] = viewRange;
 
@@ -70,11 +65,7 @@ class TextEditor {
             .join('\n');
     }
 
-    async strReplace(
-        filePath: string,
-        oldStr: string,
-        newStr: string,
-    ): Promise<number> {
+    async strReplace(filePath: string, oldStr: string, newStr: string): Promise<number> {
         if (!(await fs.pathExists(filePath))) {
             throw new Error(`File does not exist: ${filePath}`);
         }
@@ -95,11 +86,7 @@ class TextEditor {
         return occurrences;
     }
 
-    async insert(
-        filePath: string,
-        insertLine: number,
-        newStr: string,
-    ): Promise<void> {
+    async insert(filePath: string, insertLine: number, newStr: string): Promise<void> {
         if (!(await fs.pathExists(filePath))) {
             throw new Error(`File does not exist: ${filePath}`);
         }
@@ -111,9 +98,7 @@ class TextEditor {
         const lines = content.split('\n');
 
         if (insertLine < 0) {
-            throw new Error(
-                `Invalid insert_line: ${insertLine}. Line number must be >= 0.`,
-            );
+            throw new Error(`Invalid insert_line: ${insertLine}. Line number must be >= 0.`);
         }
         if (insertLine > lines.length) {
             throw new Error(
@@ -141,15 +126,7 @@ class TextEditor {
 }
 
 export const textEditorTool = tool(
-    async ({
-        command,
-        path: filePath,
-        file_text,
-        view_range,
-        old_str,
-        new_str,
-        insert_line,
-    }) => {
+    async ({ command, path: filePath, file_text, view_range, old_str, new_str, insert_line }) => {
         const editor = new TextEditor();
         const _path = path.resolve(filePath);
 
@@ -166,11 +143,7 @@ export const textEditorTool = tool(
                 if (old_str === undefined || new_str === undefined) {
                     return 'Error: old_str and new_str are required for str_replace command.';
                 }
-                const occurrences = await editor.strReplace(
-                    _path,
-                    old_str,
-                    new_str,
-                );
+                const occurrences = await editor.strReplace(_path, old_str, new_str);
                 return `Successfully replaced ${occurrences} occurrences in ${_path}.`;
             } else if (command === 'insert') {
                 if (insert_line === undefined || new_str === undefined) {
@@ -179,10 +152,7 @@ export const textEditorTool = tool(
                 await editor.insert(_path, insert_line, new_str);
                 return `Successfully inserted text at line ${insert_line} in ${_path}.`;
             } else if (command === 'create') {
-                if (
-                    (await fs.pathExists(_path)) &&
-                    (await fs.stat(_path)).isDirectory()
-                ) {
+                if ((await fs.pathExists(_path)) && (await fs.stat(_path)).isDirectory()) {
                     return `Error: the path ${_path} is a directory. Please provide a valid file path.`;
                 }
                 await editor.writeFile(_path, file_text || '');
@@ -213,9 +183,7 @@ export const textEditorTool = tool(
             file_text: z
                 .string()
                 .optional()
-                .describe(
-                    "Only applies for the 'create' command. The text to write to the file.",
-                ),
+                .describe("Only applies for the 'create' command. The text to write to the file."),
             view_range: z
                 .array(z.number())
                 .optional()

@@ -40,14 +40,9 @@ export const lsTool = tool(
             }
 
             // Filter by ignore
-            const ignorePatterns = (ignore || []).concat(
-                DEFAULT_IGNORE_PATTERNS,
-            );
+            const ignorePatterns = (ignore || []).concat(DEFAULT_IGNORE_PATTERNS);
             items = items.filter(
-                (item) =>
-                    !ignorePatterns.some((pattern) =>
-                        minimatch(item.name, pattern),
-                    ),
+                (item) => !ignorePatterns.some((pattern) => minimatch(item.name, pattern)),
             );
 
             if (items.length === 0) {

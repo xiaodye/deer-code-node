@@ -80,9 +80,7 @@ export const grepTool = tool(
         schema: z.object({
             pattern: z
                 .string()
-                .describe(
-                    'The regular expression pattern to search for in file contents.',
-                ),
+                .describe('The regular expression pattern to search for in file contents.'),
             path: z
                 .string()
                 .optional()
@@ -92,45 +90,23 @@ export const grepTool = tool(
             glob: z
                 .string()
                 .optional()
-                .describe(
-                    "Glob pattern to filter files (e.g. '*.js', '*.{ts,tsx}')",
-                ),
+                .describe("Glob pattern to filter files (e.g. '*.js', '*.{ts,tsx}')"),
             output_mode: z
                 .enum(['content', 'files_with_matches', 'count'])
                 .optional()
                 .default('files_with_matches')
                 .describe('Output mode'),
-            B: z
-                .number()
-                .optional()
-                .describe('Number of lines to show before each match.'),
-            A: z
-                .number()
-                .optional()
-                .describe('Number of lines to show after each match.'),
+            B: z.number().optional().describe('Number of lines to show before each match.'),
+            A: z.number().optional().describe('Number of lines to show after each match.'),
             C: z
                 .number()
                 .optional()
-                .describe(
-                    'Number of lines to show before and after each match.',
-                ),
+                .describe('Number of lines to show before and after each match.'),
             n: z.boolean().optional().describe('Show line numbers in output.'),
-            i: z
-                .boolean()
-                .optional()
-                .describe('Enable case insensitive search.'),
-            type: z
-                .string()
-                .optional()
-                .describe("File type to search (e.g. 'js', 'py', 'rust')."),
-            head_limit: z
-                .number()
-                .optional()
-                .describe('Limit output to first N lines/entries.'),
-            multiline: z
-                .boolean()
-                .optional()
-                .describe('Enable multiline mode.'),
+            i: z.boolean().optional().describe('Enable case insensitive search.'),
+            type: z.string().optional().describe("File type to search (e.g. 'js', 'py', 'rust')."),
+            head_limit: z.number().optional().describe('Limit output to first N lines/entries.'),
+            multiline: z.boolean().optional().describe('Enable multiline mode.'),
         }),
     },
 );

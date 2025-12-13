@@ -17,9 +17,7 @@ export class Project {
             throw new Error(`Project root directory ${path} does not exist`);
         }
         if (!fs.statSync(path).isDirectory()) {
-            throw new Error(
-                `Project root directory ${path} is not a directory`,
-            );
+            throw new Error(`Project root directory ${path} is not a directory`);
         }
         this._rootDir = path;
     }

@@ -6,10 +6,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export function applyPromptTemplate(
-    templateName: string,
-    kwargs: Record<string, any>,
-): string {
+export function applyPromptTemplate(templateName: string, kwargs: Record<string, any>): string {
     // Assuming src/prompts/templates is the location relative to this file in dist
     // Since we are using NodeNext, we can use import.meta.dirname if target is new enough,
     // or simple __dirname if compiled to CJS (which is implied by the error).

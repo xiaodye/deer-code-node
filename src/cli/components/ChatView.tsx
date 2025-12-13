@@ -1,21 +1,13 @@
 import React from 'react';
 import { Box, Text } from 'ink';
-import {
-    BaseMessage,
-    HumanMessage,
-    AIMessage,
-    ToolMessage,
-} from '@langchain/core/messages';
+import { BaseMessage, HumanMessage, AIMessage, ToolMessage } from '@langchain/core/messages';
 
 interface ChatViewProps {
     messages: BaseMessage[];
     isGenerating: boolean;
 }
 
-export const ChatView: React.FC<ChatViewProps> = ({
-    messages,
-    isGenerating,
-}) => {
+export const ChatView: React.FC<ChatViewProps> = ({ messages, isGenerating }) => {
     return (
         <Box
             flexDirection="column"
@@ -29,11 +21,7 @@ export const ChatView: React.FC<ChatViewProps> = ({
                 {messages.map((msg, index) => {
                     if (HumanMessage.isInstance(msg)) {
                         return (
-                            <Box
-                                key={index}
-                                flexDirection="column"
-                                marginTop={1}
-                            >
+                            <Box key={index} flexDirection="column" marginTop={1}>
                                 <Text color="blue" bold>
                                     User:
                                 </Text>
@@ -46,11 +34,7 @@ export const ChatView: React.FC<ChatViewProps> = ({
                         const content = msg.content as string;
                         if (!content) return null;
                         return (
-                            <Box
-                                key={index}
-                                flexDirection="column"
-                                marginTop={1}
-                            >
+                            <Box key={index} flexDirection="column" marginTop={1}>
                                 <Text color="green" bold>
                                     AI:
                                 </Text>
@@ -61,11 +45,7 @@ export const ChatView: React.FC<ChatViewProps> = ({
                         // Optionally hide tool outputs in chat to keep it clean,
                         // or show summary.
                         return (
-                            <Box
-                                key={index}
-                                flexDirection="column"
-                                marginTop={1}
-                            >
+                            <Box key={index} flexDirection="column" marginTop={1}>
                                 <Text color="gray" dimColor>
                                     Tool Output ({msg.name})
                                 </Text>

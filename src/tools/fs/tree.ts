@@ -5,11 +5,7 @@ import { z } from 'zod';
 import { minimatch } from 'minimatch';
 import { DEFAULT_IGNORE_PATTERNS } from './ignore';
 
-function shouldIgnore(
-    entryPath: string,
-    name: string,
-    ignorePatterns: string[],
-): boolean {
+function shouldIgnore(entryPath: string, name: string, ignorePatterns: string[]): boolean {
     for (const pattern of ignorePatterns) {
         const cleanPattern = pattern.replace(/\/\*\*?$/, '');
         if (minimatch(name, cleanPattern) || minimatch(entryPath, pattern)) {
@@ -44,12 +40,7 @@ async function generateTree(
 
         // Filter ignored
         entries = entries.filter(
-            (e) =>
-                !shouldIgnore(
-                    path.join(directory, e.name),
-                    e.name,
-                    ignorePatterns,
-                ),
+            (e) => !shouldIgnore(path.join(directory, e.name), e.name, ignorePatterns),
         );
 
         for (let i = 0; i < entries.length; i++) {
@@ -93,20 +84,13 @@ export const treeTool = tool(
             return `Error: the path ${dirPath} is not a directory.`;
         }
 
-        const lines = await generateTree(
-            _path,
-            '',
-            max_depth,
-            0,
-            DEFAULT_IGNORE_PATTERNS,
-        );
+        const lines = await generateTree(_path, '', max_depth, 0, DEFAULT_IGNORE_PATTERNS);
 
         return `Directory structure of ${dirPath}:\n\`\`\`\n${lines.join('\n')}\n\`\`\``;
     },
     {
         name: 'tree',
-        description:
-            "Display directory structure in a tree format, similar to the 'tree' command.",
+        description: "Display directory structure in a tree format, similar to the 'tree' command.",
         schema: z.object({
             path: z
                 .string()

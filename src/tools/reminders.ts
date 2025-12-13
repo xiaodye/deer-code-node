@@ -6,10 +6,7 @@ export function generateReminders(state: { todos?: TodoItem[] }): string {
 
     if (todos) {
         for (const todo of todos) {
-            if (
-                todo.status !== TodoStatus.completed &&
-                todo.status !== TodoStatus.cancelled
-            ) {
+            if (todo.status !== TodoStatus.completed && todo.status !== TodoStatus.cancelled) {
                 unfinishedTodos.push(todo);
             }
         }
@@ -22,12 +19,8 @@ export function generateReminders(state: { todos?: TodoItem[] }): string {
                 unfinishedTodos.length === 1 ? ' is' : 's are'
             } not completed. Before you present the final result to the user, **make sure** all the todos are completed.`,
         );
-        reminders.push(
-            '- Immediately update the TODO list using the `todo_write` tool.',
-        );
+        reminders.push('- Immediately update the TODO list using the `todo_write` tool.');
     }
 
-    return reminders.length > 0
-        ? '\n\nIMPORTANT:\n' + reminders.join('\n')
-        : '';
+    return reminders.length > 0 ? '\n\nIMPORTANT:\n' + reminders.join('\n') : '';
 }
