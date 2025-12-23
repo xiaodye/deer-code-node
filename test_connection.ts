@@ -1,6 +1,9 @@
 import dotenv from 'dotenv';
 import { ChatOpenAI } from '@langchain/openai';
+import { ChatDeepSeek } from '@langchain/deepseek';
 import { HumanMessage } from '@langchain/core/messages';
+import { createAgent, tool } from 'langchain';
+import z from 'zod';
 
 dotenv.config();
 
@@ -17,15 +20,42 @@ const model = new ChatOpenAI({
     streaming: true,
 });
 
-try {
-    console.log('Sending message...');
-    const stream = await model.stream([new HumanMessage('Hello, are you there?')]);
+const getWeather = tool(
+    async ({ city }) => {
+        return `The weather in ${city} is always sunny!`;
+    },
+    {
+        name: 'get_weather',
+        description: 'Get weather for a given city.',
+        schema: z.object({
+            city: z.string(),
+        }),
+    },
+);
 
-    console.log('Stream started. Receiving chunks:');
+try {
+    const agent = createAgent({
+        model,
+        tools: [getWeather],
+    });
+
+    console.log('Sending message...');
+
+    const stream = await agent.stream(
+        { messages: [{ role: 'user', content: 'what is the weather in sf' }] },
+        { streamMode: 'updates' },
+    );
+
+    console.log('stream:', stream);
+
     for await (const chunk of stream) {
-        process.stdout.write(chunk.content as string);
+        const [step, content] = Object.entries(chunk)[0];
+        console.log(`step: ${step}`);
+        console.log(`content: ${JSON.stringify(content, null, 2)}`);
     }
     console.log('\nStream finished.');
 } catch (e) {
     console.error('Error:', e);
+} finally {
+    console.log('finally');
 }
