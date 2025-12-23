@@ -2,6 +2,7 @@ import { render } from 'ink';
 import { App } from './cli/app';
 import dotenv from 'dotenv';
 import { project } from './project';
+import process from 'node:process';
 
 dotenv.config();
 

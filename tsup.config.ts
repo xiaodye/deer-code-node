@@ -1,6 +1,6 @@
 import { defineConfig } from 'tsup';
 import fs from 'fs-extra';
-import path from 'path';
+import path from 'node:path';
 
 export default defineConfig({
     entry: ['src/index.tsx'],
