@@ -1,6 +1,6 @@
 import { tool } from '@langchain/core/tools';
 import { z } from 'zod';
-import { getTerminal } from './bash_terminal';
+import { getTerminal } from './bash';
 
 export const bashTool = tool(
     async ({ command, reset_cwd }) => {

@@ -65,9 +65,6 @@ importers:
       react:
         specifier: ^19.2.3
         version: 19.2.3
-      vscode-ripgrep:
-        specifier: ^1.13.2
-        version: 1.13.2
       zod:
         specifier: ^4.1.13
         version: 4.1.13
@@ -512,10 +509,6 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
 
-  agent-base@5.1.1:
-    resolution: {integrity: sha512-TMeqbNl2fMW0nMjTEPOwe3J/PRFP4vqeoNuQMG0HlMrtm5QxKqdvAkZ1pRBQ/ulIyDD5Yq0nJ7YbdD8ey0TO3g==}
-    engines: {node: '>= 6.0.0'}
-
   agent-base@7.1.4:
     resolution: {integrity: sha512-MnA+YT8fwfJPgBx3m60MNqakm30XOkyIoH1y6huTQvC0PwZG7ki8NacLBcrPbNoo8vEZy7Jpuk7+jMO+CUovTQ==}
     engines: {node: '>= 14'}
@@ -731,10 +724,6 @@ packages:
   has-flag@4.0.0:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
     engines: {node: '>=8'}
-
-  https-proxy-agent@4.0.0:
-    resolution: {integrity: sha512-zoDhWrkR3of1l9QAL8/scJZyLu8j/gBkcwcaQOZh7Gyh/+uJQzGVETdgT30akuwkpL8HTRfssqI3BZuV18teDg==}
-    engines: {node: '>= 6.0.0'}
 
   https-proxy-agent@7.0.6:
     resolution: {integrity: sha512-vK9P5/iUfdl95AI+JVyUuIcVtd4ofvtrOr3HNtM2yxC9bnMbEdp3x01OhQNnjb8IJYi38VlTE3mBXwcfvywuSw==}
@@ -1192,10 +1181,6 @@ packages:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
     hasBin: true
 
-  vscode-ripgrep@1.13.2:
-    resolution: {integrity: sha512-RlK9U87EokgHfiOjDQ38ipQQX936gWOcWPQaJpYf+kAkz1PQ1pK2n7nhiscdOmLu6XGjTs7pWFJ/ckonpN7twQ==}
-    deprecated: This package has been renamed to @vscode/ripgrep, please update to the new name
-
   which@2.0.2:
     resolution: {integrity: sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==}
     engines: {node: '>= 8'}
@@ -1531,8 +1516,6 @@ snapshots:
 
   acorn@8.15.0: {}
 
-  agent-base@5.1.1: {}
-
   agent-base@7.1.4: {}
 
   ansi-escapes@7.2.0:
@@ -1740,13 +1723,6 @@ snapshots:
       uglify-js: 3.19.3
 
   has-flag@4.0.0: {}
-
-  https-proxy-agent@4.0.0:
-    dependencies:
-      agent-base: 5.1.1
-      debug: 4.4.3
-    transitivePeerDependencies:
-      - supports-color
 
   https-proxy-agent@7.0.6:
     dependencies:
@@ -2168,13 +2144,6 @@ snapshots:
   uuid@10.0.0: {}
 
   uuid@9.0.1: {}
-
-  vscode-ripgrep@1.13.2:
-    dependencies:
-      https-proxy-agent: 4.0.0
-      proxy-from-env: 1.1.0
-    transitivePeerDependencies:
-      - supports-color
 
   which@2.0.2:
     dependencies:

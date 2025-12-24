@@ -1,6 +1,6 @@
 import { createAgent } from 'langchain';
 import { StructuredTool } from '@langchain/core/tools';
-import { initChatModel } from '@/models/chat_model';
+import { initChatModel } from '@/models/chat-model';
 import { ChatOpenAI } from '@langchain/openai';
 import { project } from '@/project';
 import { applyPromptTemplate } from '@/prompts/template';

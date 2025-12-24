@@ -1,17 +1,16 @@
 import { useState, useEffect } from 'react';
 import { Box, Text, useInput } from 'ink';
-import TextInput from 'ink-text-input';
 import { AIMessage, BaseMessage, HumanMessage, ToolMessage } from '@langchain/core/messages';
-import { createCodingAgent } from '@/agents/coding_agent';
-import { ChatView } from './components/ChatView';
-import { TodoListView } from './components/TodoListView';
-import { TerminalView } from './components/TerminalView';
+import { createCodingAgent } from '@/agents/coding-agent';
+import { ChatView } from './components/chat-view';
+import { ChatInput } from './components/chat-input';
+import { TodoListView } from './components/todo-list-view';
+import { TerminalView } from './components/terminal-view';
 import { TodoItem } from '@/tools/todo/types';
 import { debugLog } from '@/utils/debug';
 
 export const App = () => {
     const [messages, setMessages] = useState<BaseMessage[]>([]);
-    const [input, setInput] = useState('分析当前项目结构');
     const [isGenerating, setIsGenerating] = useState(false);
     const [todos, setTodos] = useState<TodoItem[]>([]);
     const [terminalOutput, setTerminalOutput] = useState('');
@@ -37,7 +36,6 @@ export const App = () => {
 
         const userMsg = new HumanMessage(value);
         setMessages((prev) => [...prev, userMsg]);
-        setInput('');
         setIsGenerating(true);
 
         try {
@@ -99,15 +97,7 @@ export const App = () => {
             {activeTab === 0 && (
                 <Box flexDirection="column" flexGrow={1}>
                     <ChatView messages={messages} isGenerating={isGenerating} />
-                    <Box borderStyle="single" borderColor="gray" marginTop={0}>
-                        <Text color="green">{'> '}</Text>
-                        <TextInput
-                            value={input}
-                            onChange={setInput}
-                            onSubmit={handleSubmit}
-                            // placeholder="Type your instruction..."
-                        />
-                    </Box>
+                    <ChatInput onSubmit={handleSubmit} />
                 </Box>
             )}
 

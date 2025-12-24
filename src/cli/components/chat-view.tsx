@@ -1,3 +1,4 @@
+import React, { memo } from 'react';
 import { Box, Text } from 'ink';
 import { BaseMessage, HumanMessage, AIMessage, ToolMessage } from '@langchain/core/messages';
 import Spinner from 'ink-spinner';
@@ -7,7 +8,7 @@ interface ChatViewProps {
     isGenerating: boolean;
 }
 
-export const ChatView: React.FC<ChatViewProps> = ({ messages, isGenerating }) => {
+export const ChatView: React.FC<ChatViewProps> = memo(({ messages, isGenerating }) => {
     return (
         <Box
             flexDirection="column"
@@ -71,4 +72,4 @@ export const ChatView: React.FC<ChatViewProps> = ({ messages, isGenerating }) =>
             </Box>
         </Box>
     );
-};
+});
