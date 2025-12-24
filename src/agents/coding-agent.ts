@@ -1,4 +1,4 @@
-import { createAgent } from 'langchain';
+import { createAgent, summarizationMiddleware, todoListMiddleware } from 'langchain';
 import { StructuredTool } from '@langchain/core/tools';
 import { initChatModel } from '@/models/chat-model';
 import { ChatOpenAI } from '@langchain/openai';
@@ -6,6 +6,7 @@ import { project } from '@/project';
 import { applyPromptTemplate } from '@/prompts/template';
 import { bashTool, grepTool, lsTool, textEditorTool, todoWriteTool, treeTool } from '@/tools';
 import { CodingAgentState } from './state';
+import { MemorySaver } from '@langchain/langgraph';
 
 export function createCodingAgent(pluginTools: StructuredTool[] = []) {
     // const model = initChatModel();
@@ -34,10 +35,23 @@ export function createCodingAgent(pluginTools: StructuredTool[] = []) {
         PROJECT_ROOT: project.rootDir,
     });
 
-    return createAgent({
+    const checkpointer = new MemorySaver();
+
+    const codingAgent = createAgent({
         model,
         tools,
         systemPrompt,
+        middleware: [
+            todoListMiddleware(),
+            // summarizationMiddleware({
+            //     model,
+            //     trigger: [{ tokens: 3000, messages: 6 }],
+            //     keep: { messages: 20 },
+            // }),
+        ],
+        checkpointer,
         // stateSchema: CodingAgentState,
     });
+
+    return codingAgent;
 }
