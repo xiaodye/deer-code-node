@@ -7,6 +7,7 @@ import { ChatView } from './components/ChatView';
 import { TodoListView } from './components/TodoListView';
 import { TerminalView } from './components/TerminalView';
 import { TodoItem } from '@/tools/todo/types';
+import { debugLog } from '@/utils/debug';
 
 export const App = () => {
     const [messages, setMessages] = useState<BaseMessage[]>([]);
@@ -78,6 +79,10 @@ export const App = () => {
             setMessages((prev) => [...prev, new HumanMessage(`Error: ${error}`)]);
         } finally {
             setIsGenerating(false);
+            setMessages((prev) => {
+                debugLog('msgs', prev);
+                return prev;
+            });
         }
     };
 
