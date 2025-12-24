@@ -17,7 +17,7 @@ export function createCodingAgent(pluginTools: StructuredTool[] = []) {
         },
         temperature: 0,
         maxTokens: Number(process.env.LLM_MAX_TOKENS),
-        streaming: true,
+        // streaming: true,
     });
 
     const tools = [
@@ -38,6 +38,6 @@ export function createCodingAgent(pluginTools: StructuredTool[] = []) {
         model,
         tools,
         systemPrompt,
-        stateSchema: CodingAgentState,
+        // stateSchema: CodingAgentState,
     });
 }

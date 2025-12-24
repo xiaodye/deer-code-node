@@ -10,12 +10,12 @@ import { TodoItem } from '@/tools/todo/types';
 
 export const App = () => {
     const [messages, setMessages] = useState<BaseMessage[]>([]);
-    const [input, setInput] = useState('');
+    const [input, setInput] = useState('分析当前项目结构');
     const [isGenerating, setIsGenerating] = useState(false);
     const [todos, setTodos] = useState<TodoItem[]>([]);
     const [terminalOutput, setTerminalOutput] = useState('');
 
-    // Tab state: 0 = Terminal, 1 = Todo
+    // Tab state: 0 = Chat, 1 = Terminal, 2 = Todo
     const [activeTab, setActiveTab] = useState(0);
 
     const [agent] = useState(() => createCodingAgent());
@@ -25,9 +25,9 @@ export const App = () => {
             // Just focus change maybe?
         }
 
-        // Ctrl+Tab to switch tabs (simplified: 'Tab' key)
+        // Tab to switch tabs
         if (key.tab) {
-            setActiveTab((prev) => (prev === 0 ? 1 : 0));
+            setActiveTab((prev) => (prev + 1) % 3);
         }
     });
 
@@ -41,23 +41,23 @@ export const App = () => {
 
         try {
             const stream = await agent.stream(
-                { messages: [...messages, userMsg], todos: todos },
-                { recursionLimit: 50 },
+                { messages: [...messages, userMsg] },
+                { recursionLimit: 50, streamMode: 'updates' },
             );
 
-            for await (const event of stream) {
-                // Handle message updates
-                if (event.messages) {
-                    const newMsgs = event.messages;
+            for await (const chunk of stream) {
+                for (const nodeUpdate of Object.values(chunk)) {
+                    if (
+                        !nodeUpdate ||
+                        typeof nodeUpdate !== 'object' ||
+                        !('messages' in nodeUpdate)
+                    ) {
+                        continue;
+                    }
+
+                    const newMsgs = (nodeUpdate as any).messages as BaseMessage[];
                     if (Array.isArray(newMsgs)) {
-                        setMessages((prev) => {
-                            // Simple de-duplication by id if available, or just append
-                            // Since we don't have stable IDs, we rely on React state updates.
-                            // Ideally we should merge with existing.
-                            // For now, let's append new messages that are NOT in prev.
-                            // But stream might return just the delta messages.
-                            return [...prev, ...newMsgs];
-                        });
+                        setMessages((prev) => [...prev, ...newMsgs]);
 
                         for (const msg of newMsgs) {
                             if (ToolMessage.isInstance(msg)) {
@@ -66,19 +66,12 @@ export const App = () => {
                                     setTerminalOutput(toolMsg.content);
                                 }
                             }
-                        }
-                    }
-                }
 
-                // Handle agent events to extract tool inputs (e.g. todo_write)
-                // We look for 'agent' node output which contains the AIMessage with tool_calls
-                if (event.agent && event.agent.messages) {
-                    const agentMsgs = event.agent.messages;
-                    for (const msg of agentMsgs) {
-                        if (AIMessage.isInstance(msg) && msg.tool_calls) {
-                            for (const tc of msg.tool_calls) {
-                                if (tc.name === 'todo_write') {
-                                    setTodos(tc.args.todos);
+                            if (AIMessage.isInstance(msg) && msg.tool_calls) {
+                                for (const tc of msg.tool_calls) {
+                                    if (tc.name === 'todo_write') {
+                                        setTodos(tc.args.todos);
+                                    }
                                 }
                             }
                         }
@@ -93,29 +86,44 @@ export const App = () => {
     };
 
     return (
-        <Box flexDirection="row" height={30}>
-            <Box width="40%" flexDirection="column" paddingRight={1}>
-                <ChatView messages={messages} isGenerating={isGenerating} />
-                <Box borderStyle="single" borderColor="gray" marginTop={1}>
-                    <Text color="green">{'> '}</Text>
-                    <TextInput
-                        value={input}
-                        onChange={setInput}
-                        onSubmit={handleSubmit}
-                        // placeholder="Type your instruction..."
-                    />
-                </Box>
+        <Box flexDirection="column" minHeight={30}>
+            <Box flexDirection="row" borderStyle="single" borderColor="gray" marginBottom={0}>
+                <Text inverse={activeTab === 0}> Chat </Text>
+                <Text> | </Text>
+                <Text inverse={activeTab === 1}> Terminal </Text>
+                <Text> | </Text>
+                <Text inverse={activeTab === 2}> Todo </Text>
             </Box>
 
-            <Box width="60%" flexDirection="column">
-                {activeTab === 0 ? (
-                    <TerminalView output={terminalOutput} />
-                ) : (
-                    <TodoListView todos={todos} />
-                )}
-                <Box marginTop={1}>
-                    <Text dimColor>Press Tab to switch views (Terminal / Todo)</Text>
+            {activeTab === 0 && (
+                <Box flexDirection="column" flexGrow={1}>
+                    <ChatView messages={messages} isGenerating={isGenerating} />
+                    <Box borderStyle="single" borderColor="gray" marginTop={0}>
+                        <Text color="green">{'> '}</Text>
+                        <TextInput
+                            value={input}
+                            onChange={setInput}
+                            onSubmit={handleSubmit}
+                            // placeholder="Type your instruction..."
+                        />
+                    </Box>
                 </Box>
+            )}
+
+            {activeTab === 1 && (
+                <Box flexDirection="column" flexGrow={1}>
+                    <TerminalView output={terminalOutput} />
+                </Box>
+            )}
+
+            {activeTab === 2 && (
+                <Box flexDirection="column" flexGrow={1}>
+                    <TodoListView todos={todos} />
+                </Box>
+            )}
+
+            <Box marginTop={1}>
+                <Text dimColor>Press Tab to switch views (Chat / Terminal / Todo)</Text>
             </Box>
         </Box>
     );

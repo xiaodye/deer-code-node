@@ -18,7 +18,7 @@ importers:
         specifier: ^1.0.4
         version: 1.0.4(@langchain/core@1.1.5(openai@6.10.0(ws@8.18.3)(zod@4.1.13)))(react@19.2.3)(zod@4.1.13)
       '@langchain/openai':
-        specifier: ^1.2.0
+        specifier: ^1.1.3
         version: 1.2.0(@langchain/core@1.1.5(openai@6.10.0(ws@8.18.3)(zod@4.1.13)))(ws@8.18.3)
       '@vscode/ripgrep':
         specifier: ^1.17.0
@@ -54,7 +54,7 @@ importers:
         specifier: ^4.1.1
         version: 4.1.1
       langchain:
-        specifier: ^1.2.0
+        specifier: ^1.1.5
         version: 1.2.0(@langchain/core@1.1.5(openai@6.10.0(ws@8.18.3)(zod@4.1.13)))(openai@6.10.0(ws@8.18.3)(zod@4.1.13))(react@19.2.3)
       meow:
         specifier: ^14.0.0

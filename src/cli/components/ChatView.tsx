@@ -1,5 +1,6 @@
 import { Box, Text } from 'ink';
 import { BaseMessage, HumanMessage, AIMessage, ToolMessage } from '@langchain/core/messages';
+import Spinner from 'ink-spinner';
 
 interface ChatViewProps {
     messages: BaseMessage[];
@@ -16,7 +17,7 @@ export const ChatView: React.FC<ChatViewProps> = ({ messages, isGenerating }) =>
             flexGrow={1}
         >
             <Text bold>Chat History</Text>
-            <Box flexDirection="column" flexGrow={1} overflowY="hidden">
+            <Box flexDirection="column" flexGrow={1}>
                 {messages.map((msg, index) => {
                     if (HumanMessage.isInstance(msg)) {
                         return (
@@ -41,19 +42,32 @@ export const ChatView: React.FC<ChatViewProps> = ({ messages, isGenerating }) =>
                             </Box>
                         );
                     } else if (ToolMessage.isInstance(msg)) {
-                        // Optionally hide tool outputs in chat to keep it clean,
-                        // or show summary.
+                        const content = msg.content as string;
                         return (
-                            <Box key={index} flexDirection="column" marginTop={1}>
-                                <Text color="gray" dimColor>
-                                    Tool Output ({msg.name})
-                                </Text>
-                            </Box>
+                            <>
+                                <Box></Box>
+                                <Box key={index} flexDirection="column" marginTop={1}>
+                                    <Text color="gray" dimColor>
+                                        Tool Output ({msg.name}):
+                                    </Text>
+                                    <Box borderStyle="classic" borderColor="yellow">
+                                        <Text color="gray">{content}</Text>
+                                    </Box>
+                                </Box>
+                            </>
                         );
                     }
                     return null;
                 })}
-                {isGenerating && <Text color="yellow">Thinking...</Text>}
+                {/* Debug */}
+                {/* <Text>{JSON.stringify(messages)}</Text> */}
+                {isGenerating && (
+                    <Box flexDirection="column" marginTop={1}>
+                        <Text>
+                            <Spinner type="dots" /> Thinking...
+                        </Text>
+                    </Box>
+                )}
             </Box>
         </Box>
     );
