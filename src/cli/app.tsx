@@ -47,22 +47,18 @@ export const App = () => {
 
             for await (const chunk of stream) {
                 for (const nodeUpdate of Object.values(chunk)) {
-                    if (
-                        !nodeUpdate ||
-                        typeof nodeUpdate !== 'object' ||
-                        !('messages' in nodeUpdate)
-                    ) {
-                        continue;
-                    }
+                    const newMsgs = nodeUpdate.messages;
 
-                    const newMsgs = (nodeUpdate as any).messages as BaseMessage[];
                     if (Array.isArray(newMsgs)) {
                         setMessages((prev) => [...prev, ...newMsgs]);
 
                         for (const msg of newMsgs) {
                             if (ToolMessage.isInstance(msg)) {
-                                const toolMsg = msg as any;
-                                if (toolMsg.name === 'bash') {
+                                const toolMsg = msg;
+                                if (
+                                    toolMsg.name === 'bash' &&
+                                    typeof toolMsg.content === 'string'
+                                ) {
                                     setTerminalOutput(toolMsg.content);
                                 }
                             }
