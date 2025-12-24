@@ -6,6 +6,7 @@ import { ChatView } from './components/chat-view';
 import { ChatInput } from './components/chat-input';
 import { TodoListView } from './components/todo-list-view';
 import { TerminalView } from './components/terminal-view';
+import { Banner } from './components/banner';
 import { TodoItem } from '@/tools/todo/types';
 import { debugLog } from '@/utils/debug';
 
@@ -41,7 +42,7 @@ export const App = () => {
         try {
             const stream = await agent.stream(
                 { messages: [...messages, userMsg] },
-                { recursionLimit: 50, streamMode: 'updates' },
+                { recursionLimit: 50, streamMode: 'updates', configurable: { thread_id: '1' } },
             );
 
             for await (const chunk of stream) {
@@ -85,7 +86,7 @@ export const App = () => {
     };
 
     return (
-        <Box flexDirection="column" minHeight={30}>
+        <Box flexDirection="column" minHeight={40}>
             <Box flexDirection="row" borderStyle="single" borderColor="gray" marginBottom={0}>
                 <Text inverse={activeTab === 0}> Chat </Text>
                 <Text> | </Text>
@@ -96,6 +97,16 @@ export const App = () => {
 
             {activeTab === 0 && (
                 <Box flexDirection="column" flexGrow={1}>
+                    <Banner />
+                    <Box>
+                        <Text>Welcome to Deer Code! Type your requests below.</Text>
+                    </Box>
+                    <Box>
+                        <Text>1. Type your request to start a conversation with Deer Code.</Text>
+                    </Box>
+                    <Box>
+                        <Text>2. Use the terminal view to execute commands.</Text>
+                    </Box>
                     <ChatView messages={messages} isGenerating={isGenerating} />
                     <ChatInput onSubmit={handleSubmit} />
                 </Box>
