@@ -24,7 +24,7 @@ export const Banner = () => {
     if (!text) return null;
 
     return (
-        <Box marginBottom={1}>
+        <Box marginBottom={1} height={6}>
             <Text>{text}</Text>
         </Box>
     );

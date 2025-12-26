@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Text, useInput } from 'ink';
+import { Box, Static, Text, useInput } from 'ink';
 import { AIMessage, BaseMessage, HumanMessage, ToolMessage } from '@langchain/core/messages';
 import { createCodingAgent } from '@/agents/coding-agent';
 import { ChatView } from './components/chat-view';
@@ -10,6 +10,8 @@ import { Banner } from './components/banner';
 import { TodoItem } from '@/tools/todo/types';
 import { debugLog } from '@/utils/debug';
 
+type CodingAgent = Awaited<ReturnType<typeof createCodingAgent>>;
+
 export const App = () => {
     const [messages, setMessages] = useState<BaseMessage[]>([]);
     const [isGenerating, setIsGenerating] = useState(false);
@@ -19,7 +21,16 @@ export const App = () => {
     // Tab state: 0 = Chat, 1 = Terminal, 2 = Todo
     const [activeTab, setActiveTab] = useState(0);
 
-    const [agent] = useState(() => createCodingAgent());
+    const [agent, setAgent] = useState<CodingAgent | null>(null);
+
+    useEffect(() => {
+        const initAgent = async () => {
+            const agent = await createCodingAgent();
+            setAgent(agent);
+        };
+
+        initAgent();
+    }, []);
 
     useInput((input, key) => {
         if (key.return && !isGenerating && input.trim().length === 0) {
@@ -27,13 +38,13 @@ export const App = () => {
         }
 
         // Tab to switch tabs
-        if (key.tab) {
-            setActiveTab((prev) => (prev + 1) % 3);
-        }
+        // if (key.tab) {
+        //     setActiveTab((prev) => (prev + 1) % 2);
+        // }
     });
 
     const handleSubmit = async (value: string) => {
-        if (!value.trim()) return;
+        if (!value.trim() || !agent) return;
 
         const userMsg = new HumanMessage(value);
         setMessages((prev) => [...prev, userMsg]);
@@ -46,7 +57,7 @@ export const App = () => {
             );
 
             for await (const chunk of stream) {
-                for (const nodeUpdate of Object.values(chunk)) {
+                for (const nodeUpdate of Object.values(chunk) as any[]) {
                     const newMsgs = nodeUpdate.messages;
 
                     if (Array.isArray(newMsgs)) {
@@ -86,47 +97,44 @@ export const App = () => {
     };
 
     return (
-        <Box flexDirection="column" minHeight={40}>
-            <Box flexDirection="row" borderStyle="single" borderColor="gray" marginBottom={0}>
+        <Box flexDirection="column">
+            <Box flexDirection="column">
+                <Banner />
+                <Box>
+                    <Text>Welcome to Deer Code! Type your requests below.</Text>
+                </Box>
+                <Box>
+                    <Text>1. Type your request to start a conversation with Deer Code.</Text>
+                </Box>
+                <Box>
+                    <Text>2. Use the terminal view to execute commands.</Text>
+                </Box>
+            </Box>
+            {/* <Box flexDirection="row" borderStyle="single" borderColor="gray" marginBottom={0}>
                 <Text inverse={activeTab === 0}> Chat </Text>
                 <Text> | </Text>
-                <Text inverse={activeTab === 1}> Terminal </Text>
-                <Text> | </Text>
-                <Text inverse={activeTab === 2}> Todo </Text>
+                <Text inverse={activeTab === 1}> TodoList </Text>
+            </Box> */}
+            <Box flexDirection="column" flexGrow={1}>
+                <ChatView messages={messages} todos={todos} isGenerating={isGenerating} />
+                <ChatInput onSubmit={handleSubmit} />
             </Box>
 
-            {activeTab === 0 && (
-                <Box flexDirection="column" flexGrow={1}>
-                    <Banner />
-                    <Box>
-                        <Text>Welcome to Deer Code! Type your requests below.</Text>
-                    </Box>
-                    <Box>
-                        <Text>1. Type your request to start a conversation with Deer Code.</Text>
-                    </Box>
-                    <Box>
-                        <Text>2. Use the terminal view to execute commands.</Text>
-                    </Box>
-                    <ChatView messages={messages} isGenerating={isGenerating} />
-                    <ChatInput onSubmit={handleSubmit} />
-                </Box>
-            )}
-
-            {activeTab === 1 && (
+            {/* {activeTab === 1 && (
                 <Box flexDirection="column" flexGrow={1}>
                     <TerminalView output={terminalOutput} />
                 </Box>
-            )}
+            )} */}
 
-            {activeTab === 2 && (
+            {/* {activeTab === 1 && (
                 <Box flexDirection="column" flexGrow={1}>
                     <TodoListView todos={todos} />
                 </Box>
-            )}
+            )} */}
 
-            <Box marginTop={1}>
+            {/* <Box marginTop={1}>
                 <Text dimColor>Press Tab to switch views (Chat / Terminal / Todo)</Text>
-            </Box>
+            </Box> */}
         </Box>
     );
 };

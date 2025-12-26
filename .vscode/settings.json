@@ -1,4 +1,11 @@
 {
     "editor.tabSize": 4,
-    "cSpell.words": ["deepseek", "doubao", "langchain", "langgraph"]
+    "cSpell.words": [
+        "checkpointer",
+        "deepseek",
+        "doubao",
+        "langchain",
+        "langgraph",
+        "modelcontextprotocol"
+    ]
 }

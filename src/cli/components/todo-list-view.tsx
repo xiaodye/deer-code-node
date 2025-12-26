@@ -9,7 +9,7 @@ export const TodoListView: React.FC<TodoListViewProps> = ({ todos }) => {
     return (
         <Box
             flexDirection="column"
-            borderStyle="single"
+            borderStyle="round"
             borderColor="magenta"
             padding={1}
             flexGrow={1}

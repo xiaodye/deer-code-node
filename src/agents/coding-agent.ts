@@ -1,4 +1,4 @@
-import { createAgent, summarizationMiddleware, todoListMiddleware } from 'langchain';
+import { createAgent, summarizationMiddleware } from 'langchain';
 import { StructuredTool } from '@langchain/core/tools';
 import { initChatModel } from '@/models/chat-model';
 import { ChatOpenAI } from '@langchain/openai';
@@ -7,8 +7,10 @@ import { applyPromptTemplate } from '@/prompts/template';
 import { bashTool, grepTool, lsTool, textEditorTool, todoWriteTool, treeTool } from '@/tools';
 import { CodingAgentState } from './state';
 import { MemorySaver } from '@langchain/langgraph';
+import { loadMcpTools } from '@/mcp';
+import { todoListMiddleware } from '@/middlewares/todo-list';
 
-export function createCodingAgent(pluginTools: StructuredTool[] = []) {
+export async function createCodingAgent() {
     // const model = initChatModel();
     const model = new ChatOpenAI({
         modelName: process.env.LLM_MODEL,
@@ -21,6 +23,8 @@ export function createCodingAgent(pluginTools: StructuredTool[] = []) {
         // streaming: true,
     });
 
+    const mcpTools = await loadMcpTools();
+
     const tools = [
         bashTool,
         grepTool,
@@ -28,7 +32,7 @@ export function createCodingAgent(pluginTools: StructuredTool[] = []) {
         textEditorTool,
         todoWriteTool,
         treeTool,
-        ...pluginTools,
+        ...mcpTools,
     ];
 
     const systemPrompt = applyPromptTemplate('coding_agent', {

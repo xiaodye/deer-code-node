@@ -7,7 +7,7 @@ interface ChatInputProps {
 }
 
 export const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
-    const [input, setInput] = useState('分析当前项目结构');
+    const [input, setInput] = useState('');
 
     const handleSubmit = (value: string) => {
         if (!value.trim()) return;
@@ -17,7 +17,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
     };
 
     return (
-        <Box borderStyle="single" borderColor="gray" marginTop={0}>
+        <Box borderStyle="round" borderColor="#8894DE" marginTop={0}>
             <Text color="green">{'> '}</Text>
             <TextInput value={input} onChange={setInput} onSubmit={handleSubmit} />
         </Box>
