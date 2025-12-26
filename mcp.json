@@ -1,8 +1,13 @@
 {
-    "mcp_servers": {
+    "mcpServers": {
         "context7": {
-            "transport": "streamable_http",
-            "url": "https://mcp.context7.com/mcp"
+            "command": "npx",
+            "args": [
+                "-y",
+                "@upstash/context7-mcp",
+                "--api-key",
+                "ctx7sk-8d0f7a5e-8f14-4ccd-bfd3-27df806e4064"
+            ]
         }
     }
 }

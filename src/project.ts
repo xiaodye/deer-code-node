@@ -1,10 +1,15 @@
 import fs from 'fs-extra';
 import process from 'node:process';
+import path from 'node:path';
+
+const logFile = path.join(process.cwd(), 'debug.log');
 
 export class Project {
     private _rootDir: string;
 
     constructor(path: string) {
+        // 清空 debug.log 内容
+        fs.writeFileSync(logFile, '');
         this._rootDir = path;
     }
 
